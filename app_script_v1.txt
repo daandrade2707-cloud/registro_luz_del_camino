@@ -1,0 +1,81 @@
+function doPost(e) {
+  try {
+    // --- Validar datos recibidos ---
+    const raw = e.postData?.contents;
+    if (!raw) throw new Error("No se recibieron datos (postData vacío).");
+
+    const data = JSON.parse(raw);
+    const cliente = data.cliente || {};
+    const productos = data.productos || [];
+
+    const ss = SpreadsheetApp.openById("1_e3KhpynZI5jCDn4GBZqXwe-IpZkiE9G1L4CQ7v8HU0");
+    const sh = ss.getSheetByName("Pedidos_Auto");
+    if (!sh) throw new Error("❌ No se encontró la hoja 'Pedidos_Auto'.");
+
+    const fechaRegistro = Utilities.formatDate(new Date(), "America/Lima", "dd/MM/yyyy HH:mm:ss");
+
+    // --- Crear encabezado si la hoja está vacía ---
+    if (sh.getLastRow() === 0) {
+      sh.appendRow([
+        "Código", "Fecha Registro", "Fecha Entrega", "Cliente", "Producto", "Unidad",
+        "Cantidad", "Precio", "Monto", "Descuento", "Monto c/Desc.", "Estado",
+        "Debe", "Contacto", "Celular", "Dirección", "Mapa", "Cierre"
+      ]);
+    }
+
+    // --- Registrar cada producto ---
+    let totalGeneral = 0;
+    productos.forEach((p) => {
+      const cantidad = parseFloat(p.cantidad || 0);
+      const precio = parseFloat(p.precio || 0);
+      const descuento = parseFloat(p.descuento || 0);
+      const monto = cantidad * precio;
+      const montoDesc = monto - descuento;
+      totalGeneral += montoDesc;
+      const pago = parseFloat(cliente.pago || 0);
+      const debe = montoDesc - pago;
+      const codigo = "PED-" + Utilities.formatString("%03d", sh.getLastRow());
+
+      sh.appendRow([
+        codigo,
+        fechaRegistro,
+        cliente.fechaEntrega,
+        cliente.nombre,
+        p.pedido,
+        "", // unidad
+        cantidad,
+        precio,
+        monto,
+        descuento,
+        montoDesc,
+        "0: Por Entregar",
+        debe,
+        cliente.contacto,
+        cliente.celular,
+        cliente.direccion,
+        "", // mapa
+        ""  // cierre
+      ]);
+    });
+
+    const pagoCliente = parseFloat(cliente.pago || 0);
+    const saldoPendiente = totalGeneral - pagoCliente;
+
+    Logger.log(`✅ Pedido guardado correctamente. Total: S/ ${totalGeneral.toFixed(2)} | Debe: S/ ${saldoPendiente.toFixed(2)}`);
+
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        ok: true,
+        mensaje: "✅ Pedido guardado correctamente.",
+        total: totalGeneral,
+        debe: saldoPendiente
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    Logger.log("❌ Error detectado: " + err.message);
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, error: err.message })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
