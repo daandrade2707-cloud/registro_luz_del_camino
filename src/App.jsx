@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3evabrtId_B3Pz0QAyQ62SEcJN96cMSLKNMTRtu9IMusU1oIeDmGDG3YxQEeZkNdf/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7PrQsa4LBeY6Y6pIRdagyWESJQkcifwvwGEVyRzedyxaM30gb1jCeSZ8O8nvcY0VQ/exec";
 
 const PRODUCTOS = [
   { codigo: "01:Tortillas Asadas", precio: 2 },
