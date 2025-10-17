@@ -77,18 +77,20 @@ export default function AppRegistroPedidos() {
 
   // 🔹 Cálculo de totales corregido
   const { total, totalDesc } = useMemo(() => {
-    const total = productos.reduce(
-      (s, p) => s + Number(p.cantidad || 0) * Number(p.precio || 0),
-      0
-    );
-    const totalDesc = productos.reduce(
-      (s, p) =>
-        s +
-        (Number(p.cantidad || 0) * Number(p.precio || 0) -
-          Number(p.descuento || 0)),
-      0
-    );
-    return { total, totalDesc };
+    const total = productos.reduce((s, p) => {
+    const cantidad = Number(p.cantidad) || 0;
+    const precio = Number(p.precio) || 0;
+    return s + cantidad * precio;
+  }, 0);
+
+  const totalDesc = productos.reduce((s, p) => {
+    const cantidad = Number(p.cantidad) || 0;
+    const precio = Number(p.precio) || 0;
+    const desc = Number(p.descuento) || 0;
+    return s + cantidad * precio - desc;
+  }, 0);
+
+  return { total, totalDesc };
   }, [productos]);
 
   // 🔹 Envío del pedido (modo no-cors para Netlify)
