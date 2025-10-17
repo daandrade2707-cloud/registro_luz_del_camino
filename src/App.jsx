@@ -55,7 +55,9 @@ export default function AppRegistroPedidos() {
     const { name, value } = e.target;
 
     if (name === "pedido") {
-      const prod = PRODUCTOS.find((p) => p.codigo === value);
+      const prod = PRODUCTOS.find(
+        (p) => p.codigo.trim().toLowerCase() === value.trim().toLowerCase()
+      );
       nuevos[i] = { ...nuevos[i], pedido: value, precio: prod ? prod.precio : "" };
     } else {
       // 🔹 Forzamos valores numéricos cuando corresponde
