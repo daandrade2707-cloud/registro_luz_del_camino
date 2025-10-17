@@ -27,7 +27,11 @@ const PRODUCTOS = [
   { codigo: "111:Harina de sango 1/2 kg", precio: 4.5 },
   { codigo: "112:Harina de sango 1 kg", precio: 8 },
   { codigo: "121:Harina de trigo 1/2 kg", precio: 7.5 },
-  { codigo: "122:Harina de trigo 1 kg", precio: 14 }
+  { codigo: "122:Harina de trigo 1 kg", precio: 14 },
+  { codigo: "123:Miel de Caña 1/2 kg", precio: 10 },
+  { codigo: "124:Miel de Caña 1 kg", precio: 18 },
+  { codigo: "125:Tagelas", precio: 35},
+  { codigo: "999:Delivery", precio: 0}
 ];
 
 export default function AppRegistroPedidos() {

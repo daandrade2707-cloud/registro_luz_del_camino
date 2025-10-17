@@ -1,86 +1,105 @@
 function doPost(e) {
   try {
-    const raw = e.postData?.contents;
-    if (!raw) throw new Error("No se recibieron datos (postData vacío).");
+    // --- ✅ Manejo de CORS y Preflight (permite acceso desde Netlify y móviles)
+    if (!e) {
+      return ContentService.createTextOutput("Request vacía")
+        .setMimeType(ContentService.MimeType.TEXT)
+        .setHeader("Access-Control-Allow-Origin", "*")
+        .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+        .setHeader("Access-Control-Allow-Headers", "Content-Type");
+    }
 
-    const data = JSON.parse(raw);
+    // Si el navegador envía una solicitud OPTIONS (preflight)
+    if (e.postData === undefined) {
+      return ContentService.createTextOutput("")
+        .setMimeType(ContentService.MimeType.TEXT)
+        .setHeader("Access-Control-Allow-Origin", "*")
+        .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+        .setHeader("Access-Control-Allow-Headers", "Content-Type");
+    }
+
+    // --- ✅ Validar contenido del cuerpo
+    if (!e.postData || !e.postData.contents) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: "Sin cuerpo (postData vacío)." })
+      )
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader("Access-Control-Allow-Origin", "*");
+    }
+
+    // --- Parsear JSON recibido
+    const data = JSON.parse(e.postData.contents);
     const cliente = data.cliente || {};
     const productos = data.productos || [];
 
+    // --- Abrir hoja de Google Sheets
     const ss = SpreadsheetApp.openById("1_e3KhpynZI5jCDn4GBZqXwe-IpZkiE9G1L4CQ7v8HU0");
     const sh = ss.getSheetByName("Pedidos_Auto");
-    if (!sh) throw new Error("❌ No se encontró la hoja 'Pedidos_Auto'.");
-
-    const fechaRegistro = Utilities.formatDate(new Date(), "America/Lima", "dd/MM/yyyy HH:mm:ss");
-
-    // --- Crear encabezado si la hoja está vacía ---
-    if (sh.getLastRow() === 0) {
-      sh.appendRow([
-        "Código", "Fecha Registro", "Fecha Entrega", "Cliente", "Producto", "Unidad",
-        "Cantidad", "Precio", "Monto", "Descuento", "Monto c/Desc.", "Estado",
-        "Debe", "Contacto", "Celular", "Dirección", "Mapa", "Cierre"
-      ]);
+    if (!sh) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: "No existe la hoja 'Pedidos_Auto'." })
+      )
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader("Access-Control-Allow-Origin", "*");
     }
 
-    // --- Calcular total del pedido (sumando todos los productos) ---
-    const totalPedido = productos.reduce((suma, p) => {
-      const cantidad = parseFloat(p.cantidad || 0);
-      const precio = parseFloat(p.precio || 0);
-      const descuento = parseFloat(p.descuento || 0);
-      return suma + (cantidad * precio - descuento);
-    }, 0);
+    // --- Variables comunes
+    const fechaRegistro = new Date();
+    const fechaEntrega = cliente.fechaEntrega || "";
+    const nombre = cliente.nombre || "";
+    const direccion = cliente.direccion || "";
+    const celular = cliente.celular || "";
+    const mapa = cliente.mapa || "";
+    const pago = Number(cliente.pago || 0);
+    const contacto = cliente.contacto || "WPP";
 
-    const pagoCliente = parseFloat(cliente.pago || 0);
-    const debeTotal = totalPedido - pagoCliente;
-
-    // --- Registrar cada producto ---
-    productos.forEach((p, index) => {
-      const cantidad = parseFloat(p.cantidad || 0);
-      const precio = parseFloat(p.precio || 0);
-      const descuento = parseFloat(p.descuento || 0);
-      const monto = cantidad * precio;
-      const montoDesc = monto - descuento;
-      const codigo = "PED-" + Utilities.formatString("%03d", sh.getLastRow() + 1);
-
-      const debe = index === 0 ? debeTotal : "";
+    // --- Registrar cada producto
+    productos.forEach((p) => {
+      const cantidad = Number(p.cantidad || 0);
+      const precio = Number(p.precio || 0);
+      const desc = Number(p.descuento || 0);
+      const total = cantidad * precio;
+      const totalConDesc = total - desc;
+      const debe = Math.max(totalConDesc - pago, 0);
 
       sh.appendRow([
-        codigo,
+        "PED-" + Utilities.formatDate(new Date(), "America/Lima", "yyyyMMddHHmmss"),
         fechaRegistro,
-        cliente.fechaEntrega,
-        cliente.nombre,
-        p.pedido,
-        "", // unidad
+        fechaEntrega,
+        nombre,
+        p.pedido || "",
+        "Und.",
         cantidad,
         precio,
-        monto,
-        descuento,
-        montoDesc,
+        total,
+        desc,
+        totalConDesc,
         "0: Por Entregar",
         debe,
-        cliente.contacto,
-        cliente.celular,
-        cliente.direccion,
-        cliente.mapa || "", // 🌍 Guardar el link de Google Maps
-        "" // cierre
+        contacto,
+        celular,
+        direccion,
+        mapa,
+        ""
       ]);
     });
 
-    Logger.log(`✅ Pedido guardado correctamente con ubicación. Total: S/ ${totalPedido.toFixed(2)} | Pago: S/ ${pagoCliente} | Debe: S/ ${debeTotal}`);
-
+    // --- ✅ Respuesta con cabeceras CORS
     return ContentService.createTextOutput(
-      JSON.stringify({
-        ok: true,
-        mensaje: "✅ Pedido guardado correctamente con ubicación.",
-        total: totalPedido,
-        debe: debeTotal,
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
+      JSON.stringify({ ok: true, message: "✅ Pedido guardado correctamente." })
+    )
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   } catch (err) {
-    Logger.log("❌ Error detectado: " + err.message);
     return ContentService.createTextOutput(
       JSON.stringify({ ok: false, error: err.message })
-    ).setMimeType(ContentService.MimeType.JSON);
+    )
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
   }
 }
