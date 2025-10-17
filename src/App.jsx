@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxaN0T04e3orVLdIUMG6Qj33pyDCMLd__T35mlHJUvuS4Rw-d_FNw1l2ZWlgTmpFnXc/exec";
-
+  //"https://script.google.com/macros/s/AKfycbxaN0T04e3orVLdIUMG6Qj33pyDCMLd__T35mlHJUvuS4Rw-d_FNw1l2ZWlgTmpFnXc/exec";
+    "https://script.google.com/macros/s/AKfycbw_3wBhmivf4P3CG7cglrSwTvRjacjYCZughIaPw0e5YWZelAfh8GArWCjGK8_PvU3Y/exec";
 const PRODUCTOS = [
   { codigo: "01:Tortillas Asadas", precio: 2 },
   { codigo: "021:Mazapanes 18un", precio: 20 },
