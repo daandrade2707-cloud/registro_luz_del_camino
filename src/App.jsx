@@ -5,12 +5,29 @@ const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbw_3wBhmivf4P3CG7cglrSwTvRjacjYCZughIaPw0e5YWZelAfh8GArWCjGK8_PvU3Y/exec";
 const PRODUCTOS = [
   { codigo: "01:Tortillas Asadas", precio: 2 },
-  { codigo: "021:Mazapanes 18un", precio: 20 },
-  { codigo: "041:Miel de Abeja 1/2 kg", precio: 25 },
+  { codigo: "021:Mazapanes 1un", precio: 1 },
+  { codigo: "022:Mazapanes 18un", precio: 20 },
+  { codigo: "031:Aguaymanto 1/2 kg", precio: 11 },
+  { codigo: "032:Aguaymanto 1 kg", precio: 20 },
+  { codigo: "041:Miel de Abeja 1/4 kg", precio: 15 },
+  { codigo: "042:Miel de Abeja 1/2 kg", precio: 25 },
   { codigo: "043:Miel de Abeja 1 kg", precio: 40 },
+  { codigo: "051:Algarrobina 1/4 kg", precio: 15 },
   { codigo: "052:Algarrobina 1/2 kg", precio: 22 },
+  { codigo: "053:Algarrobina 1 kg", precio: 40 },
+  { codigo: "061:Primera 1/2 litro", precio: 10 },
+  { codigo: "062:Primera 1 litro", precio: 20 },
   { codigo: "07:Café 1 kg", precio: 55 },
-  { codigo: "101:Queso 1 kg", precio: 30 },
+  { codigo: "081:Manjar 1/8 kg", precio: 6 },
+  { codigo: "082:Manjar 1/4 kg", precio: 10 },
+  { codigo: "083:Manjar 1/2 kg", precio: 18 },
+  { codigo: "084:Manjar 1 kg", precio: 32 },
+  { codigo: "101:Queso 1/2 kg", precio: 15 },
+  { codigo: "102:Queso 1 kg", precio: 30 },
+  { codigo: "111:Harina de sango 1/2 kg", precio: 4.5 },
+  { codigo: "112:Harina de sango 1 kg", precio: 8 },
+  { codigo: "121:Harina de trigo 1/2 kg", precio: 7.5 },
+  { codigo: "122:Harina de trigo 1 kg", precio: 14 }
 ];
 
 export default function AppRegistroPedidos() {
