@@ -2,18 +2,13 @@ import React, { useState, useMemo } from "react";
 
 const SCRIPT_URL =
   //"https://script.google.com/macros/s/AKfycbxaN0T04e3orVLdIUMG6Qj33pyDCMLd__T35mlHJUvuS4Rw-d_FNw1l2ZWlgTmpFnXc/exec";
-  //v2//"https://script.google.com/macros/s/AKfycbw_3wBhmivf4P3CG7cglrSwTvRjacjYCZughIaPw0e5YWZelAfh8GArWCjGK8_PvU3Y/exec";
-  "https://script.google.com/macros/s/AKfycbxnxRUPl3QL-09hgj2foc1L1NBGKpjLHtHzXmpoKyAQ1h9O_QxiWsVFzWcmtebbpqiB/exec"
-
-    const PRODUCTOS = [
+    "https://script.google.com/macros/s/AKfycbw_3wBhmivf4P3CG7cglrSwTvRjacjYCZughIaPw0e5YWZelAfh8GArWCjGK8_PvU3Y/exec";
+const PRODUCTOS = [
   { codigo: "01:Tortillas Asadas", precio: 2 },
   { codigo: "021:Mazapanes 1un", precio: 1 },
   { codigo: "022:Mazapanes 18un", precio: 20 },
   { codigo: "031:Aguaymanto 1/2 kg", precio: 11 },
   { codigo: "032:Aguaymanto 1 kg", precio: 20 },
-  { codigo: "033:Mermelada de Aguaymanto 1/4 kg", precio: 8 },
-  { codigo: "034:Mermelada de Aguaymanto 1/2 kg", precio: 15.50},
-  { codigo: "035:Mermelada de Aguaymanto 1 kg", precio: 30},
   { codigo: "041:Miel de Abeja 1/4 kg", precio: 15 },
   { codigo: "042:Miel de Abeja 1/2 kg", precio: 25 },
   { codigo: "043:Miel de Abeja 1 kg", precio: 40 },
@@ -49,7 +44,6 @@ export default function AppRegistroPedidos() {
     celular: "",
     contacto: "WPP",
     pago: "",
-    estado: "0",
   });
 
   const [productos, setProductos] = useState([
@@ -184,21 +178,6 @@ export default function AppRegistroPedidos() {
             value={cliente.pago}
             onChange={handleClienteChange}
           />
-          
-          <div>
-            <label className="text-sm font-medium text-slate-600">
-              Estado del Pedido
-            </label>
-            <select
-              name="estado"
-              value={cliente.estado}
-              onChange={handleClienteChange}
-              className="w-full border border-slate-300 rounded-xl px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-            >
-              <option value="0">0: Por Entregar</option>
-              <option value="1">1: Entregado</option>
-            </select>
-          </div>
 
           {/* Productos */}
           <div className="border-t pt-4">

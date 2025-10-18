@@ -1,0 +1,105 @@
+function doPost(e) {
+  try {
+    // --- ✅ Manejo de CORS y Preflight (permite acceso desde Netlify y móviles)
+    if (!e) {
+      return ContentService.createTextOutput("Request vacía")
+        .setMimeType(ContentService.MimeType.TEXT)
+        .setHeader("Access-Control-Allow-Origin", "*")
+        .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+        .setHeader("Access-Control-Allow-Headers", "Content-Type");
+    }
+
+    // Si el navegador envía una solicitud OPTIONS (preflight)
+    if (e.postData === undefined) {
+      return ContentService.createTextOutput("")
+        .setMimeType(ContentService.MimeType.TEXT)
+        .setHeader("Access-Control-Allow-Origin", "*")
+        .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+        .setHeader("Access-Control-Allow-Headers", "Content-Type");
+    }
+
+    // --- ✅ Validar contenido del cuerpo
+    if (!e.postData || !e.postData.contents) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: "Sin cuerpo (postData vacío)." })
+      )
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader("Access-Control-Allow-Origin", "*");
+    }
+
+    // --- Parsear JSON recibido
+    const data = JSON.parse(e.postData.contents);
+    const cliente = data.cliente || {};
+    const productos = data.productos || [];
+
+    // --- Abrir hoja de Google Sheets
+    const ss = SpreadsheetApp.openById("1_e3KhpynZI5jCDn4GBZqXwe-IpZkiE9G1L4CQ7v8HU0");
+    const sh = ss.getSheetByName("Pedidos_Auto");
+    if (!sh) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: "No existe la hoja 'Pedidos_Auto'." })
+      )
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader("Access-Control-Allow-Origin", "*");
+    }
+
+    // --- Variables comunes
+    const fechaRegistro = new Date();
+    const fechaEntrega = cliente.fechaEntrega || "";
+    const nombre = cliente.nombre || "";
+    const direccion = cliente.direccion || "";
+    const celular = cliente.celular || "";
+    const mapa = cliente.mapa || "";
+    const pago = Number(cliente.pago || 0);
+    const contacto = cliente.contacto || "WPP";
+
+    // --- Registrar cada producto
+    productos.forEach((p) => {
+      const cantidad = Number(p.cantidad || 0);
+      const precio = Number(p.precio || 0);
+      const desc = Number(p.descuento || 0);
+      const total = cantidad * precio;
+      const totalConDesc = total - desc;
+      const debe = Math.max(totalConDesc - pago, 0);
+
+      sh.appendRow([
+        "PED-" + Utilities.formatDate(new Date(), "America/Lima", "yyyyMMddHHmmss"),
+        fechaRegistro,
+        fechaEntrega,
+        nombre,
+        p.pedido || "",
+        "Und.",
+        cantidad,
+        precio,
+        total,
+        desc,
+        totalConDesc,
+        "0: Por Entregar",
+        debe,
+        contacto,
+        celular,
+        direccion,
+        mapa,
+        ""
+      ]);
+    });
+
+    // --- ✅ Respuesta con cabeceras CORS
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, message: "✅ Pedido guardado correctamente." })
+    )
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, error: err.message })
+    )
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+}
