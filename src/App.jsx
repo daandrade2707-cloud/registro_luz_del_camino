@@ -4,13 +4,15 @@ const SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbwhv2NYe3Ze2DK00YhmXVVL_c6t2J3fMEsxX7mQ6NPB5QeIBvGC3tjn8inONVhXT9dP/exec";
     
   const PRODUCTOS = [
-  { codigo: "01:Tortillas Asadas", precio: 2 },
+  { codigo: "011:Tortillas Asadas de Trigo", precio: 2 },
+  { codigo: "012:Tortillas Asadas de Maiz", precio: 2.80},  
   { codigo: "021:Mazapanes 1un", precio: 1 },
   { codigo: "022:Mazapanes 18un", precio: 20 },
   { codigo: "031:Aguaymanto 1/2 kg", precio: 11 },
   { codigo: "032:Aguaymanto 1 kg", precio: 20 },
-  { codigo: "033:Mermelada de Aguaymanto 1/4 kg", precio: 8 },
-  { codigo: "034:Mermelada de Aguaymanto 1/2 kg", precio: 15.50},
+  { codigo: "033:Mermelada de Aguaymanto 1/16 kg", precio: 3 },
+  { codigo: "033:Mermelada de Aguaymanto 1/4 kg", precio: 9 },
+  { codigo: "034:Mermelada de Aguaymanto 1/2 kg", precio: 16},
   { codigo: "035:Mermelada de Aguaymanto 1 kg", precio: 30},
   { codigo: "041:Miel de Abeja 1/4 kg", precio: 15 },
   { codigo: "042:Miel de Abeja 1/2 kg", precio: 25 },
