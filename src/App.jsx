@@ -41,6 +41,7 @@ const SCRIPT_URL =
   { codigo: "123:Miel de Caña 1/2 kg", precio: 10 },
   { codigo: "124:Miel de Caña 1 kg", precio: 18 },
   { codigo: "125:Tagelas", precio: 35},
+  { codigo: "888: Taper Queso", precio: 1.50},  
   { codigo: "999:Delivery", precio: 0}
 ];
 
