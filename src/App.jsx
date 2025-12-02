@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwhv2NYe3Ze2DK00YhmXVVL_c6t2J3fMEsxX7mQ6NPB5QeIBvGC3tjn8inONVhXT9dP/exec";
+  "https://script.google.com/macros/s/AKfycbzCfGTXlMq73huSrFW0oOJjj5qPTyZZRTbxvGVyF04BNCzSYqOZGrY7ycCdLpC8B9Qw/exec";
     
   const PRODUCTOS = [
   { codigo: "011:Tortillas Asadas de Trigo", precio: 2 },
@@ -10,27 +10,27 @@ const SCRIPT_URL =
   { codigo: "022:Mazapanes 18un", precio: 20 },
   { codigo: "031:Aguaymanto 1/2 kg", precio: 11 },
   { codigo: "032:Aguaymanto 1 kg", precio: 20 },
-  { codigo: "033:Mermelada de Aguaymanto 1/16 kg", precio: 3 },
-  { codigo: "033:Mermelada de Aguaymanto 1/4 kg", precio: 9 },
+  { codigo: "033:Mermelada de Aguaymanto 1/16 kg", precio: 4},
+  { codigo: "033:Mermelada de Aguaymanto 1/4 kg", precio: 9},
   { codigo: "034:Mermelada de Aguaymanto 1/2 kg", precio: 16},
   { codigo: "035:Mermelada de Aguaymanto 1 kg", precio: 30},
-  { codigo: "041:Miel de Abeja 1/4 kg", precio: 15 },
-  { codigo: "042:Miel de Abeja 1/2 kg", precio: 25 },
-  { codigo: "043:Miel de Abeja 1 kg", precio: 40 },
-  { codigo: "051:Algarrobina 1/4 kg", precio: 15 },
-  { codigo: "052:Algarrobina 1/2 kg", precio: 22 },
-  { codigo: "053:Algarrobina 1 kg", precio: 40 },
-  { codigo: "061:Primera 1/2 litro", precio: 10 },
-  { codigo: "062:Primera 1 litro", precio: 20 },
-  { codigo: "071:Café 1/4 kg", precio: 16 },
-  { codigo: "072:Café 1/2 kg", precio: 32 },
-  { codigo: "073:Café 1 kg", precio: 64 },
-  { codigo: "081:Manjar 1/8 kg", precio: 6 },
-  { codigo: "082:Manjar 1/4 kg", precio: 10 },
-  { codigo: "083:Manjar 1/2 kg", precio: 18 },
-  { codigo: "084:Manjar 1 kg", precio: 32 },
-  { codigo: "101:Queso 1/2 kg", precio: 17 },
-  { codigo: "102:Queso 1 kg", precio: 30 },
+  { codigo: "041:Miel de Abeja 1/4 kg", precio: 15},
+  { codigo: "042:Miel de Abeja 1/2 kg", precio: 25},
+  { codigo: "043:Miel de Abeja 1 kg", precio: 40},
+  { codigo: "051:Algarrobina 1/4 kg", precio: 15},
+  { codigo: "052:Algarrobina 1/2 kg", precio: 22},
+  { codigo: "053:Algarrobina 1 kg", precio: 40},
+  { codigo: "061:Primera 1/2 litro", precio: 10},
+  { codigo: "062:Primera 1 litro", precio: 20},
+  { codigo: "071:Café 1/4 kg", precio: 16},
+  { codigo: "072:Café 1/2 kg", precio: 32},
+  { codigo: "073:Café 1 kg", precio: 64},
+  { codigo: "081:Manjar 1/8 kg", precio: 6},
+  { codigo: "082:Manjar 1/4 kg", precio: 10},
+  { codigo: "083:Manjar 1/2 kg", precio: 18},
+  { codigo: "084:Manjar 1 kg", precio: 32},
+  { codigo: "101:Queso 1/2 kg", precio: 17},
+  { codigo: "102:Queso 1 kg", precio: 30},
   { codigo: "103:Queso Seco 1/4 kg", precio: 16},
   { codigo: "104:Queso Seco 1/2 kg", precio: 25},
   { codigo: "105:Queso Seco 1 kg", precio: 40},
@@ -41,6 +41,7 @@ const SCRIPT_URL =
   { codigo: "123:Miel de Caña 1/2 kg", precio: 10 },
   { codigo: "124:Miel de Caña 1 kg", precio: 18 },
   { codigo: "125:Tagelas", precio: 35},
+  { codigo: "13:Sambumba", precio: 10},
   { codigo: "888: Taper Queso", precio: 1.50},  
   { codigo: "999:Delivery", precio: 0}
 ];
@@ -54,6 +55,7 @@ export default function AppRegistroPedidos() {
     contacto: "WPP",
     pago: "",
     estado: "0",
+    vendedor: "", // 👈 NUEVO CAMPO
   });
 
   const [productos, setProductos] = useState([
@@ -167,6 +169,15 @@ export default function AppRegistroPedidos() {
             value={cliente.nombre}
             onChange={handleClienteChange}
           />
+
+            {/* 🚨 NUEVO CAMPO VENDEDOR */}
+          <Input
+            label="Nombre del Vendedor *"
+            name="vendedor"
+            value={cliente.vendedor}
+            onChange={handleClienteChange}
+          />
+
           <Input
             label="Fecha de Entrega *"
             name="fechaEntrega"
