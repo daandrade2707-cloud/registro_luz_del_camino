@@ -31,9 +31,8 @@ const SCRIPT_URL =
   { codigo: "084:Manjar 1 kg", precio: 32},
   { codigo: "101:Queso 1/2 kg", precio: 17},
   { codigo: "102:Queso 1 kg", precio: 30},
-  { codigo: "103:Queso Seco 1/4 kg", precio: 16},
-  { codigo: "104:Queso Seco 1/2 kg", precio: 25},
-  { codigo: "105:Queso Seco 1 kg", precio: 40},
+  { codigo: "104:Queso Seco 400 gr", precio: 25},
+  { codigo: "105:Queso Seco 800 gr", precio: 40},
   { codigo: "111:Harina de sango 1/2 kg", precio: 4.5 },
   { codigo: "112:Harina de sango 1 kg", precio: 8 },
   { codigo: "121:Harina de trigo 1/2 kg", precio: 7.5 },
@@ -42,6 +41,10 @@ const SCRIPT_URL =
   { codigo: "124:Miel de Caña 1 kg", precio: 18 },
   { codigo: "125:Tagelas", precio: 35},
   { codigo: "13:Sambumba", precio: 10},
+  { codigo: "14:Tostado con Chicharrones", precio: 7},
+  { codigo: "151:Chicharrones Sanqueños 1 kg", precio: 32},
+  { codigo: "152:Chicharrones Sanqueños 1/2 kg", precio: 18},
+  { codigo: "153:Chicharrones Sanqueños 1/4 kg", precio: 10},
   { codigo: "888: Taper Queso", precio: 1.50},  
   { codigo: "999:Delivery", precio: 0}
 ];
